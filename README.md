@@ -1,5 +1,5 @@
 # Azure-AD-Routing
-Testing out Azure AD Routing with ADAL JDK.
+Testing out Azure AD Routing with ADAL JDK for multitenancy apps.
 
 This is intended to work with Azure App Services (API App), Mongo DB / Cosmos DB, and Azure AD.
 
@@ -56,14 +56,14 @@ Connection String:
 ![](images/AzureCosmosConfig2.png?raw=true)
 
 The schema should be in the form of:
-
+```
 {
 	"_id" : ObjectId(""), //Auto generated guid
 	"tid" : "", //GUID for Azure AD Directory ID
 	"webAppUrl" : "http://bing.com", //example url for redirect with GET
 	"webApiUrl" : "http://bing.com" //example url for redirect with POST
 }
-
+```
 ### Azure App Services API App
 
 We'll want to set up an Azure App Service API App.  This can be added in the marketplace, and we'll want to set some settings for it.
@@ -74,7 +74,7 @@ These are the application settings that will be read by the app service.
 
 ### Azure App Service Kudu Deployment
 
-The Kudu powershell console can be reached under the https://<appservicename>.scm.azurewebsites.net.  This console will let us deploy the jar file that we can build for the app, which will sit in the /build/Routing-x.jar.
+The Kudu powershell console can be reached under the https://<appservicename>.scm.azurewebsites.net.  This console will let us deploy the jar file that we can build for the app, which will sit in the /build/Routing-x.jar.  We can drag and drop the jar file into $home/site/wwwroot/webapps/. which is for Springboot.
 
 ![](images/AzureAppServiceKudu0.png?raw=true)
 
@@ -82,6 +82,23 @@ We will also want to place a web.config for the spring boot app to run a given j
 
 ![](images/AzureAppServiceKudu1.png?raw=true)
 ![](images/AzureAppServiceKudu2.png?raw=true)
+
+The Web Config has a path specified which should be on the Azure App Service.  In this case we point to the jar file that we deployed at $home/site/wwwroot/webapps/.
+
+```
+<!--this is for the azure app service configuration-->
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <system.webServer>
+    <handlers>
+      <add name="httpPlatformHandler" path="*" verb="*" modules="httpPlatformHandler" resourceType="Unspecified" />
+    </handlers>
+    <httpPlatform processPath="%JAVA_HOME%\bin\java.exe"
+        arguments="-Djava.net.preferIPv4Stack=true -Dserver.port=%HTTP_PLATFORM_PORT% -jar &quot;%HOME%\site\wwwroot\webapps\Routing-0.0.1-SNAPSHOT.jar&quot;">
+    </httpPlatform>
+  </system.webServer>
+</configuration>
+```
 
 ## Testing
 
@@ -117,6 +134,9 @@ POST https://appservice.azurewebsites.net/webapi and the JSON payload.
 Assuming that our credentials are picked up in the domain, we should have redirects to the URL that we specified in the tenant db.
 
 ## Contributors
-A special thanks to Stewart Adam, Prashant Karbhari, Doris Chen, Marc Kuperstein, Max Knor, Justine Cocchi, Reenu Soluja, Denis Kisselev, Neeraj Joshi, Ryan CrawCour, Bruno Terkaly, Robin Drolet, and George LeBlanc for chats.
+A special thanks to Stewart Adam, Prashant Karbhari, Doris Chen, Marc Kuperstein, Max Knor, Justine Cocchi, Reenu Saluja, Denis Kisselev, Neeraj Joshi, Ryan CrawCour, Bruno Terkaly, Robin Drolet, and George LeBlanc for patience and great discussion.
 
 Andy Gee
+
+## Todos
+It would be great to cover some of the automation for deployment to Azure.
