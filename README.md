@@ -74,7 +74,7 @@ These are the application settings that will be read by the app service.
 
 ### Azure App Service Kudu Deployment
 
-The Kudu powershell console can be reached under the https://<appservicename>.scm.azurewebsites.net.  This console will let us deploy the jar file that we can build for the app, which will sit in the /build/Routing-x.jar.  We can drag and drop the jar file into $home/site/wwwroot/webapps/. which is for Springboot.
+The Kudu powershell console can be reached under the https://appservicename.scm.azurewebsites.net.  This console will let us deploy the jar file that we can build for the app, which will sit in the /build/Routing-x.jar.  We can drag and drop the jar file into $home/site/wwwroot/webapps/. which is for Springboot.
 
 ![](images/AzureAppServiceKudu0.png?raw=true)
 
