@@ -37,6 +37,15 @@ We'll want to ensure that our organization will be able to test, so we can login
 ![](images/AzureADDirectoryId.png?raw=true)
 Take note of this directory ID, as this is the tenant id that we will resolve for a user from the domain.
 
+### Azure AD App Configuration
+
+On the Azure AD App, we'll want to make sure the Graph and Windows AD permissions are setup, as well as the Reply URLs.
+![](images/AzureADGraphPermissions.png?raw=true)
+![](images/AzureADPermissions.png?raw=true)
+
+We'll want to point the Reply URLs to the Azure App Service endpoints that we're going to expose as part of the authentication flow.
+![](images/AzureADReplyUrls.png?raw=true)
+
 ### Azure Cosmos DB for Mongo API
 Set up a Cosmos DB with Mongo API in Azure.
 https://docs.microsoft.com/en-us/azure/cosmos-db/create-mongodb-java
@@ -110,11 +119,15 @@ Springboot will use a default endpoint for testing:
 
 http://localhost:8080/
 
-And we can test with http://localhost:8080/webapp endpoint in the browser.
+And we can test with http://localhost:8080/webAppDirect endpoint in the browser.
+
+We can use the end point /webappclientcredential as a smoke test from the app service or from localhost too.  This will not include additional prompts (blanket approach).
 
 We can also utilize CURL or Postman for the other endpoint too.
 
 POST http://localhost:8080/webapi and the JSON payload.
+
+We can use the endpoint /webappclientcredential with POST from the app service or from localhost too.  This will not include additional prompts (blanket approach).
 
 Assuming that our credentials are picked up in the domain, we should have redirects to the URL that we specified in the tenant db.
 
@@ -122,13 +135,13 @@ Assuming that our credentials are picked up in the domain, we should have redire
 
 We can swap in the values for the application and deploy the jar.
 
-And we can test with https://appservice.azurewebsites.net/webapp endpoint in the browser.
+And we can test with https://appservice.azurewebsites.net/webAppDirect endpoint in the browser.
 
 ![](images/AzureAppServiceRedirectWebAppTest.png?raw=true)
 
 We can also utilize CURL or Postman for the other endpoint too.
 
-POST https://appservice.azurewebsites.net/webapi and the JSON payload.
+POST https://appservice.azurewebsites.net/webApiDirect and the JSON payload.
 ![](images/AzureAppServiceRedirectWebApiTest.png?raw=true)
 
 Assuming that our credentials are picked up in the domain, we should have redirects to the URL that we specified in the tenant db.

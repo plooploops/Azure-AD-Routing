@@ -6,6 +6,7 @@ public class Configurations
     //these should be populated in the environment.
     public enum Keys
     {
+        State,
         ClientId,
         ClientSecret,
         Tenant,
@@ -16,7 +17,10 @@ public class Configurations
         TenantCollection,
         TenantId,
         WebAppUrl,
-        WebApiUrl
+        WebApiUrl,
+        Resource,
+        ResourceID,
+        RedirectUrlTemplate
     }
 
     public static String GetValue(Keys k)
